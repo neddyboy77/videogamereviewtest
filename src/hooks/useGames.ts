@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import apiClients from "../services/api-clients";
-import { CanceledError } from "axios";
+import useData from "./useData";
 
 export interface Platform {
   id: number;
@@ -16,36 +14,7 @@ export interface Game {
   metacritic: number;
 }
 
-interface FetchGamesResponse {
-  count: number;
-  results: Game[];
-}
 
-const useGames = () => {
-  const [games, setGames] = useState<Game[]>([]);
-  const [error, setError] = useState<string>(""); // Explicitly setting the type as string
-  const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    setLoading(true);
-    apiClients
-      .get<FetchGamesResponse>("/games", {signal: controller.signal})
-      .then((res) => {
-        setGames(res.data.results)
-        setLoading(false);
-        })
-      .catch((err) =>{
-        if (err instanceof CanceledError) return;
-        setError(err.message)
-        setLoading(false);
-      });
-
-      return () => controller.abort();
-  }, []); // Empty dependency array to run the effect only once on mount
-
-  return { games, error, isLoading };
-};
+const useGames = () => useData<Game> ('/games')
 
 export default useGames;
