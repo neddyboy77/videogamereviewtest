@@ -10,7 +10,7 @@ interface FetchResponse<T>{
 
 const useData = <T> (endpoint:string) => {
     const [data, setData] = useState<T[]>([]);
-    const [error, setError] = useState<string>("");
+    const [error, setError] = useState("");
     const [isLoading, setLoading] = useState(false);
   
     useEffect(() => {
@@ -32,6 +32,7 @@ const useData = <T> (endpoint:string) => {
         return () => controller.abort();
     }, []); // Empty dependency array to run the effect only once on mount
   
-    return { data, error, isLoading };};
+    return { data, error, isLoading };
+  };
 
 export default useData;
